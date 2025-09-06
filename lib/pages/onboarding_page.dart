@@ -19,26 +19,26 @@ class _OnboardingPageState extends State<OnboardingPage> {
   // 온보딩 페이지 데이터
   final List<OnboardingData> _onboardingData = [
     OnboardingData(
-      title: '안녕하세요!\n클리어 풋프린트입니다',
-      description: '우리의 디지털 활동이\n환경에 미치는 영향을\n함께 알아보세요',
+      title: '안녕하세요!\n맑은발자국 입니다',
+      description: '우리의 무분별한 생성형 AI의 이용이 \n환경에 미치는 영향을 함께 알아보세요',
       icon: Icons.eco,
       color: primaryColor,
     ),
     OnboardingData(
       title: 'ChatGPT 한 번 호출할 때마다',
-      description: '약 4.32g의 CO₂가\n대기 중으로 배출됩니다',
+      description: '약 1.332g의 CO₂가 대기 중으로 배출됩니다.',
       icon: Icons.cloud_outlined,
       color: Colors.orange,
     ),
     OnboardingData(
-      title: '이는 자동차로\n10m 주행한 것과 같은\n탄소 배출량입니다',
-      description: '작은 호출이지만\n누적되면 큰 영향을 미쳐요',
+      title: '이는 자동차로 10m 주행한 것과\n같은 탄소 배출량입니다',
+      description: '작은 호출이지만 누적되면 큰 영향을 미쳐요.',
       icon: Icons.directions_car,
       color: Colors.red,
     ),
     OnboardingData(
-      title: '지금부터 함께\nAI 사용량을 줄여서',
-      description: '더 깨끗한 지구를\n만들어가요!',
+      title: 'AI 사용이 지구에 미치는 영향을\n두 발로 체감해봐요',
+      description: '구글 계정으로 로그인 해볼까요?',
       icon: Icons.favorite,
       color: primaryColor,
     ),
@@ -142,7 +142,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                               ),
                             ),
                             child: const Text(
-                              '💡 하루에 100번 사용하면\n432g의 CO₂ 배출!',
+                              '💡 하루에 100번 사용하면 133.2g의 CO₂ 배출!',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 16,
@@ -199,12 +199,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          const Text(
-                            '운동 데이터를 연동해서\n더 정확한 탄소발자국을 계산해보세요',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 14, color: Colors.grey),
                           ),
                         ],
                       ],
