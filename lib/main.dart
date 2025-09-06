@@ -55,7 +55,7 @@ class _MainTabViewState extends State<MainTabView> {
         },
         type: BottomNavigationBarType.fixed, // 3개 이상의 탭을 위해 fixed 타입 사용
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.dock), label: '기록'),
+          BottomNavigationBarItem(icon: Icon(Icons.border_color), label: '기록'),
           BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
           BottomNavigationBarItem(icon: Icon(Icons.eco), label: '탄소발자국'),
         ],
