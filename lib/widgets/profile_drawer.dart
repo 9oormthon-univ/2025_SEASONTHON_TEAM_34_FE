@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clear_footprint/color.dart';
-import 'package:clear_footprint/widgets/ai_frequency_modal.dart';
+import 'package:clear_footprint/pages/settings_page.dart';
+import 'package:clear_footprint/services/auth_service.dart';
 
 // 프로필 사이드바 위젯
 class ProfileDrawer extends StatelessWidget {
-  const ProfileDrawer({super.key});
+  final VoidCallback? onSettingsChanged; // 설정 변경 시 호출될 콜백
+
+  const ProfileDrawer({super.key, this.onSettingsChanged});
 
   @override
   Widget build(BuildContext context) {
+    // 현재 로그인한 사용자 정보 가져오기
+    final User? user = FirebaseAuth.instance.currentUser;
+
     return Drawer(
       child: Container(
         color: backgroundColor,
@@ -18,17 +25,22 @@ class ProfileDrawer extends StatelessWidget {
               decoration: BoxDecoration(color: primaryColor),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: whiteColor,
-                child: Icon(
-                  Icons.person,
-                  size: 50,
-                  color: primaryColor,
-                ), // 프로필 아이콘
+                backgroundImage:
+                    user?.photoURL != null
+                        ? NetworkImage(user!.photoURL!)
+                        : null,
+                child:
+                    user?.photoURL == null
+                        ? Icon(Icons.person, size: 50, color: primaryColor)
+                        : null, // 구글 프로필 이미지 또는 기본 아이콘
               ),
               accountName: Text(
-                '사용자 이름',
+                user?.displayName ?? '지킴이', // 구글 계정 이름 또는 기본값
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              accountEmail: Text('user@example.com'),
+              accountEmail: Text(
+                user?.email ?? 'user@example.com',
+              ), // 구글 계정 이메일 또는 기본값
             ),
             ListTile(
               leading: Icon(Icons.home, color: primaryColor),
@@ -57,22 +69,32 @@ class ProfileDrawer extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.settings, color: primaryColor),
               title: Text('설정', style: TextStyle(fontSize: 16)),
-              onTap: () {
+              onTap: () async {
                 Navigator.pop(context);
-                // AI 활용 빈도 설정 모달 표시
-                showDialog(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (context) => const AiFrequencyModal(),
+                // 설정 페이지로 이동하고 결과를 기다림
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingsPage()),
                 );
+
+                // 설정이 변경되었다면 콜백 호출
+                if (result == true && onSettingsChanged != null) {
+                  onSettingsChanged!();
+                }
               },
             ),
             ListTile(
               leading: Icon(Icons.logout, color: primaryColor),
               title: Text('로그아웃', style: TextStyle(fontSize: 16)),
-              onTap: () {
+              onTap: () async {
                 Navigator.pop(context);
-                // 로그아웃 기능
+                // 실제 로그아웃 기능 구현
+                await AuthService().signOut();
+                // 온보딩 페이지로 이동 (로그인 페이지)
+                Navigator.of(
+                  // ignore: use_build_context_synchronously
+                  context,
+                ).pushNamedAndRemoveUntil('/onboarding', (route) => false);
               },
             ),
           ],

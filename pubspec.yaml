@@ -43,6 +43,13 @@ dependencies:
   # 사용자 상태 관리를 위한 패키지
   shared_preferences: ^2.3.2
 
+  # GPS 위치 추적을 위한 패키지
+  geolocator: ^12.0.0
+  permission_handler: ^11.3.1
+
+  # 차트 라이브러리
+  fl_chart: ^0.68.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
