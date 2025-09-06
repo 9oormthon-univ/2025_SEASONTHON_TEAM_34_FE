@@ -10,16 +10,12 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('홈'), backgroundColor: secondaryColor),
       backgroundColor: backgroundColor,
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.home, size: 80, color: primaryColor),
-            SizedBox(height: 20),
-            Text(
-              '홈 페이지',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
+            Image.asset('assets/images/character.png', width: 100, height: 100),
+            Container(width: 360, height: 100, color: whiteColor),
             SizedBox(height: 10),
             Text(
               'Clear Footprint에 오신 것을 환영합니다!',
