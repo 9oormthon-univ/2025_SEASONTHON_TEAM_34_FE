@@ -97,11 +97,18 @@ class _MainTabViewState extends State<MainTabView> {
   int _currentIndex = 1; // 현재 선택된 탭 인덱스
 
   // 각 탭에 해당하는 페이지 위젯들
-  final List<Widget> _pages = [
+  List<Widget> get _pages => [
     const RecordPage(),
-    const HomePage(),
+    HomePage(onDrawerPageChanged: _changePageIndex), // 콜백 전달
     const FootprintPage(),
   ];
+
+  // 페이지 인덱스 변경 메서드
+  void _changePageIndex(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,9 +123,12 @@ class _MainTabViewState extends State<MainTabView> {
         },
         type: BottomNavigationBarType.fixed, // 3개 이상의 탭을 위해 fixed 타입 사용
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.border_color), label: '기록'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.directions_walk),
+            label: '기록',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.eco), label: '탄소발자국'),
+          BottomNavigationBarItem(icon: Icon(Icons.emoji_events), label: '랭킹'),
         ],
         backgroundColor: secondaryColor,
         unselectedIconTheme: const IconThemeData(size: 36),
