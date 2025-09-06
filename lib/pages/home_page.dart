@@ -16,15 +16,38 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   int selectedFrequencyIndex = 0; // 기본값
   static const String _frequencyKey =
       'ai_frequency_index'; // SharedPreferences 키
+
+  // 애니메이션 컨트롤러 추가 - 숨쉬는 효과용
+  late AnimationController _breathingController;
+  late Animation<double> _breathingAnimation;
 
   @override
   void initState() {
     super.initState();
     _loadFrequency(); // 저장된 빈도 불러오기
+
+    // 숨쉬는 애니메이션 초기화
+    _breathingController = AnimationController(
+      duration: const Duration(seconds: 2), // 2초 주기로 숨쉬기
+      vsync: this,
+    );
+
+    _breathingAnimation = Tween<double>(
+      begin: 100.0, // 95픽셀에서 시작
+      end: 110.0, // 105픽셀까지 (평균 100픽셀 기준으로 ±5픽셀)
+    ).animate(
+      CurvedAnimation(
+        parent: _breathingController,
+        curve: Curves.easeInOut, // 자연스러운 숨쉬기 커브
+      ),
+    );
+
+    // 애니메이션 반복 실행 (무한 반복)
+    _breathingController.repeat(reverse: true);
   }
 
   // 저장된 빈도를 불러오는 메서드
@@ -44,6 +67,12 @@ class _HomePageState extends State<HomePage> {
   // 설정 변경 시 콜백 함수
   void _onResume() {
     _loadFrequency(); // 설정 변경 시 빈도 다시 불러오기
+  }
+
+  @override
+  void dispose() {
+    _breathingController.dispose(); // 애니메이션 컨트롤러 해제
+    super.dispose();
   }
 
   @override
@@ -82,10 +111,18 @@ class _HomePageState extends State<HomePage> {
             children: [
               Row(
                 children: [
-                  Image.asset(
-                    'assets/images/character.png',
-                    width: 100,
-                    height: 100,
+                  SizedBox(height: 110),
+                  // 숨쉬는 애니메이션이 적용된 캐릭터 이미지
+                  AnimatedBuilder(
+                    animation: _breathingAnimation,
+                    builder: (context, child) {
+                      return Image.asset(
+                        fit: BoxFit.fill,
+                        'assets/images/character.png',
+                        width: 100, // 가로 크기 애니메이션
+                        height: _breathingAnimation.value, // 세로 크기 애니메이션
+                      );
+                    },
                   ),
                   SizedBox(width: 20),
                   Column(

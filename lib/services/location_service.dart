@@ -92,7 +92,7 @@ class LocationService {
       );
       print('distance: $distance');
       // 거리가 100m 미만일 때만 추가 (오류 방지)
-      if (distance < 4) {
+      if (distance < 10) {
         _totalDistanceToday += distance;
         await _saveLocationData(newPosition);
       }
