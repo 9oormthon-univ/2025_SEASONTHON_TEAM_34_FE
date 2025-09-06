@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:clear_footprint/widgets/profile_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:clear_footprint/color.dart';
 import 'package:clear_footprint/services/location_service.dart';
@@ -141,16 +142,6 @@ class _RecordPageState extends State<RecordPage> with WidgetsBindingObserver {
     }
   }
 
-  // 거리를 적절한 단위로 포맷팅
-  String _formatDistance(double meters) {
-    if (meters < 1000) {
-      return '${meters.toStringAsFixed(0)}m';
-    } else {
-      double km = meters / 1000;
-      return '${km.toStringAsFixed(2)}km';
-    }
-  }
-
   // 도넛 차트 위젯 생성
   Widget _buildDonutChart() {
     double progressPercentage = (_todayDistance / _dailyGoalDistance).clamp(
@@ -201,12 +192,12 @@ class _RecordPageState extends State<RecordPage> with WidgetsBindingObserver {
               ),
               const SizedBox(height: 4),
               Text(
-                _formatDistance(_todayDistance),
+                AiFrequencyModel.formatDistance(_todayDistance),
                 style: const TextStyle(fontSize: 16, color: Colors.grey),
               ),
               const SizedBox(height: 2),
               Text(
-                '/ ${_formatDistance(_dailyGoalDistance)}',
+                '/ ${AiFrequencyModel.formatDistance(_dailyGoalDistance)}',
                 style: const TextStyle(fontSize: 12, color: Colors.grey),
               ),
             ],
@@ -216,9 +207,35 @@ class _RecordPageState extends State<RecordPage> with WidgetsBindingObserver {
     );
   }
 
+  // 설정 변경 시 콜백 함수
+  void _onResume() {
+    // _loadFrequency(); // 설정 변경 시 빈도 다시 불러오기
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          '맑은발자국',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: whiteColor,
+          ),
+        ),
+        backgroundColor: primaryColor,
+        leading: Builder(
+          builder:
+              (context) => IconButton(
+                icon: Icon(Icons.menu, color: whiteColor), // 사이드바 버튼
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              ),
+        ),
+      ),
+      drawer: ProfileDrawer(
+        onSettingsChanged: _onResume, // 설정 변경 시 콜백
+      ),
       backgroundColor: backgroundColor,
       body: SafeArea(
         child: Padding(
@@ -299,19 +316,15 @@ class _RecordPageState extends State<RecordPage> with WidgetsBindingObserver {
                               color: primaryColor,
                             ),
                             Text(
-                              _formatDistance(_todayDistance),
+                              AiFrequencyModel.formatDistance(_todayDistance),
                               style: const TextStyle(
                                 fontSize: 48,
                                 fontWeight: FontWeight.bold,
-                                color: primaryColor,
+                                color: blackColor,
                               ),
                             ),
                           ],
                         ),
-                    Text(
-                      '${_todayDistance.toStringAsFixed(0)} 미터',
-                      style: const TextStyle(fontSize: 14, color: Colors.grey),
-                    ),
                   ],
                 ),
               ),
