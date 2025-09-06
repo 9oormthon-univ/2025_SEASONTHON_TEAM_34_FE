@@ -12,7 +12,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  int selectedFrequencyIndex = 0; // 기본 선택된 빈도 인덱스 (첫 번째 항목)
+  int selectedFrequencyIndex = 3; // 기본 선택된 빈도 인덱스 (첫 번째 항목)
   static const String _frequencyKey =
       'ai_frequency_index'; // SharedPreferences 키
 
