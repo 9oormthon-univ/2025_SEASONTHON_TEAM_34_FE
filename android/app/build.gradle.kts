@@ -3,12 +3,14 @@ plugins {
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+    // Firebase용 Google 서비스 플러그인
+    id("com.google.gms.google-services")
 }
 
 android {
     namespace = "com.protector.clearfootprint.clear_footprint"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973" // Firebase 플러그인들이 요구하는 NDK 버전
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -24,7 +26,8 @@ android {
         applicationId = "com.protector.clearfootprint.clear_footprint"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // minSdk = flutter.minSdkVersion
+        minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

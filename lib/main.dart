@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:clear_footprint/color.dart';
 import 'package:clear_footprint/pages/record_page.dart';
 import 'package:clear_footprint/pages/home_page.dart';
 import 'package:clear_footprint/pages/footprint_page.dart';
+import 'package:clear_footprint/pages/onboarding_page.dart';
+import 'package:clear_footprint/services/auth_service.dart';
 
-void main() {
+// Firebase 초기화 및 앱 시작
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Firebase 초기화
+  await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 
@@ -19,8 +28,60 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
       ),
-      home: const MainTabView(),
+      home: const AuthWrapper(), // 인증 상태에 따른 화면 분기
     );
+  }
+}
+
+// 인증 상태를 확인하여 적절한 화면으로 라우팅하는 위젯
+class AuthWrapper extends StatefulWidget {
+  const AuthWrapper({super.key});
+
+  @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  bool _isLoading = true;
+  bool _isLoggedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthStatus();
+  }
+
+  // 로그인 상태 확인
+  Future<void> _checkAuthStatus() async {
+    try {
+      final authService = AuthService();
+      final user = await authService.tryAutoLogin();
+
+      setState(() {
+        _isLoggedIn = user != null;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('인증 상태 확인 오류: $e');
+      setState(() {
+        _isLoggedIn = false;
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 로딩 중일 때 표시할 화면
+    if (_isLoading) {
+      return const Scaffold(
+        backgroundColor: backgroundColor,
+        body: Center(child: CircularProgressIndicator(color: primaryColor)),
+      );
+    }
+
+    // 로그인 상태에 따른 화면 분기
+    return _isLoggedIn ? const MainTabView() : const OnboardingPage();
   }
 }
 
