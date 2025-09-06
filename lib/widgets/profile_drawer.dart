@@ -7,8 +7,9 @@ import 'package:clear_footprint/services/auth_service.dart';
 // 프로필 사이드바 위젯
 class ProfileDrawer extends StatelessWidget {
   final VoidCallback? onSettingsChanged; // 설정 변경 시 호출될 콜백
+  final Function(int)? onPageChanged; // 페이지 변경을 위한 콜백
 
-  const ProfileDrawer({super.key, this.onSettingsChanged});
+  const ProfileDrawer({super.key, this.onSettingsChanged, this.onPageChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -47,22 +48,32 @@ class ProfileDrawer extends StatelessWidget {
               title: Text('홈', style: TextStyle(fontSize: 16)),
               onTap: () {
                 Navigator.pop(context);
+                // 홈 페이지로 이동 (인덱스 1)
+                if (onPageChanged != null) {
+                  onPageChanged!(1);
+                }
               },
             ),
             ListTile(
-              leading: Icon(Icons.eco, color: primaryColor),
-              title: Text('탄소 발자국', style: TextStyle(fontSize: 16)),
+              leading: Icon(Icons.emoji_events, color: primaryColor),
+              title: Text('랭킹', style: TextStyle(fontSize: 16)),
               onTap: () {
                 Navigator.pop(context);
-                // 탄소 발자국 페이지로 이동
+                // 탄소 발자국 페이지로 이동 (인덱스 2)
+                if (onPageChanged != null) {
+                  onPageChanged!(2);
+                }
               },
             ),
             ListTile(
-              leading: Icon(Icons.assessment, color: primaryColor),
+              leading: Icon(Icons.directions_walk, color: primaryColor),
               title: Text('기록', style: TextStyle(fontSize: 16)),
               onTap: () {
                 Navigator.pop(context);
-                // 기록 페이지로 이동
+                // 기록 페이지로 이동 (인덱스 0)
+                if (onPageChanged != null) {
+                  onPageChanged!(0);
+                }
               },
             ),
             Divider(),
