@@ -1,24 +1,29 @@
 // AI 활용 빈도와 일당 사용 횟수 매핑 모델
 class AiFrequencyModel {
   static const List<String> frequencies = [
-    '지피티 유료 버전 사용할 정도로 미쳐있어요',
-    '지피티 무료 버전을 쓰긴 하는데 부족해요',
-    '지피티 무료 버전을 적당히 사용해요',
-    '일 1-2회',
-    '주 1-2회',
-    '월 2-3회',
+    'GPT 유료 버전을 사용하는데 부족해요',
+    'GPT 유료 버전을 적당히 사용해요',
+    'GPT 무료 버전을 사용하는데 부족해요',
+    'GPT 무료 버전을 적당히 사용해요',
     '거의 사용 안해요',
   ];
 
   // 각 빈도에 따른 일당 평균 AI 사용 횟수
   static const List<double> dailyUsageCounts = [
-    100.0, // 지피티 유료 버전 사용할 정도로 미쳐있어요
-    50.0, // 지피티 무료 버전을 쓰긴 하는데 부족해요
-    15.0, // 지피티 무료 버전을 적당히 사용해요
-    1.5, // 일 1-2회
-    0.2, // 주 1-2회 (1.5/7)
-    0.08, // 월 2-3회 (2.5/30)
-    0.01, // 거의 사용 안해요
+    1280.0, // GPT 유료 버전을 사용하는데 부족해요
+    100.0, // GPT 유료 버전을 적당히 사용해요
+    50.0, // GPT 무료 버전을 사용하는데 부족해요
+    20.0, // GPT 무료 버전을 적당히 사용해요
+    1.0, // 거의 사용 안해요
+  ];
+
+  // 각 빈도에 따른 메시지 (인덱스 순서와 동일)
+  static const List<String> messages = [
+    "😅 에휴... 이정도로 쓰시면\n얼마나 걸어야 하는지 알아요?", // GPT 유료 버전 부족
+    "😤 AI 좀 적당히 쓰세요!\n이만큼 걸어야 해요", // GPT 유료 버전 적당히
+    "😏 무료도 이렇게 쓰시면\n이만큼은 걸어야죠~", // GPT 무료 버전 부족
+    "😊 적당히 쓰시는군요!\n이정도만 걸으면 돼요", // GPT 무료 버전 적당히
+    "😍 오~ 환경 지킴이시네요!\n이것만 걸으면 충분해요", // 거의 사용 안함
   ];
 
   // 탄소 배출 계수 (kg CO₂ per query) - 수식에서 0.001332kg 사용
@@ -41,6 +46,14 @@ class AiFrequencyModel {
       return frequencies[index];
     }
     return frequencies[0]; // 기본값
+  }
+
+  // 인덱스로부터 빈도에 따른 메시지 가져오기
+  static String getFrequencyMessage(int index) {
+    if (index >= 0 && index < messages.length) {
+      return messages[index];
+    }
+    return messages[0]; // 기본값
   }
 
   // 일당 탄소 배출량 계산 (g CO₂) - 표시용
@@ -73,5 +86,15 @@ class AiFrequencyModel {
   static String getFormattedWalkingDistance(int frequencyIndex) {
     final distance = calculateWalkingDistance(frequencyIndex);
     return distance.toStringAsFixed(1);
+  }
+
+  // 거리를 적절한 단위로 포맷팅
+  static String formatDistance(double meters) {
+    if (meters < 1000) {
+      return '${meters.toStringAsFixed(0)} m';
+    } else {
+      double km = meters / 1000;
+      return '${km.toStringAsFixed(2)} km';
+    }
   }
 }
